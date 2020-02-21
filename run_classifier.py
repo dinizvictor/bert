@@ -25,6 +25,7 @@ import modeling
 import optimization
 import tokenization
 import tensorflow as tf
+import pandas as pd
 
 flags = tf.flags
 
@@ -199,8 +200,12 @@ class DataProcessor(object):
     with tf.gfile.Open(input_file, "r") as f:
       reader = csv.reader(f, delimiter="\t", quotechar=quotechar)
       lines = []
-      for line in reader:
-        lines.append(line)
+      df = pd.read_csv(f, sep='\t', encoding='utf-8')
+      for index, row in df.iterrows():
+          lines.append(row.tolist())
+
+      # for line in reader:
+      #  lines.append(line)
       return lines
 
 
@@ -372,6 +377,1057 @@ class ColaProcessor(DataProcessor):
       examples.append(
           InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
     return examples
+
+class Offen_1_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+      """See base class."""
+      return self._create_trn_examples(
+        self._read_tsv(os.path.join(data_dir, "one/offenseval-training-v1.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+      """See base class."""
+      #        return self._create_test_examples(
+      #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+      return self._create_dev_examples(
+        self._read_tsv(os.path.join(data_dir, "one/offenseval-trial.txt")), "dev")
+
+    def get_labels(self):
+      """See base class."""
+      return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+      """Creates examples for the training and dev sets."""
+      examples = []
+      for (i, line) in enumerate(lines):
+        #            guid = "%s-%s" % (set_type, i)
+        guid = line[0]
+        text_a = line[1]
+        if line[2] == "OFF":
+          label = '1'
+        else:
+          label = '0'
+        examples.append(
+          InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+      return examples
+
+    def _create_dev_examples(self, lines, set_type):
+      """Creates examples for the training and dev sets."""
+      examples = []
+      for (i, line) in enumerate(lines):
+        guid = "%s-%s" % (set_type, i)
+        text_a = line[0]
+        if line[1] == "OFF":
+          label = '1'
+        else:
+          label = '0'
+        examples.append(
+          InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+      return examples
+
+    def _create_test_examples(self, lines, set_type):
+      examples = []
+      for (i, line) in enumerate(lines):
+        if i != 0:
+          #            guid = "%s-%s" % (set_type, i)
+          guid = line[0]
+          text_a = line[1]
+          label = '0'
+          examples.append(
+            InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+      return examples
+
+
+
+class HatevalHate_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "hateval_hate/train_en.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "hateval_hate/dev_en.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == '1':
+                label = '1'
+                print("train found hate")
+            else:
+                label = '0'
+                print("train no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == '1':
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class HatevalAggression_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "hateval_aggression/train_en.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "hateval_aggression/dev_en.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[4] == '1':
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[4] == '1':
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+class ami_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "ami/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "ami/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == '1':
+                label = '1'
+                print("misoginy")
+            else:
+                label = '0'
+                print("no misoginy")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == '1':
+                label = '1'
+                print("test found misoginy")
+            else:
+                label = '0'
+                print("test no misoginy")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class DavidsonHate_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "davidson/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "davidson/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[7]
+            if line[6] == 0:
+                label = '1'
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[7]
+            if line[6] == 0:
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+class DavidsonOffensive_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "davidson/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "davidson/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            print(line)
+            guid = line[0]
+            text_a = line[7]
+            if line[6] == 1:
+                label = '1'
+                print("Davidson off")
+            else:
+                label = '0'
+                print("Davidson no off")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[7]
+            if line[6] == 1:
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+class ToxicityToxic_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+                print("test found no toxic")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+                print("test no toxic")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ToxicityIdentityHate_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[8] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[8] == 1:
+                label = '1'
+                print("test found identity hate")
+            else:
+                label = '0'
+                print("test no identity hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ToxicitySevereToxic_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[4] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[4] == 1:
+                label = '1'
+                print("test found severe")
+            else:
+                label = '0'
+                print("test no severe")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ToxicityInsult_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[7] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[7] == 1:
+                label = '1'
+                print("test found severe")
+            else:
+                label = '0'
+                print("test no severe")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ToxicityObscene_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[5] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[5] == 1:
+                label = '1'
+                print("test found severe")
+            else:
+                label = '0'
+                print("test no severe")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ToxicityThreat_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "toxicity/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[6] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[6] == 1:
+                label = '1'
+                print("test found severe")
+            else:
+                label = '0'
+                print("test no severe")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class StormfrontPost_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "stormfront_post/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "stormfront_post/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("test found toxic")
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("test found severe")
+            else:
+                label = '0'
+                print("test no severe")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class StormfrontSentence_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "stormfront_sentence/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "stormfront_sentence/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[4]
+            if line[5] == 'hate':
+                label = '1'
+                print("hate")
+            else:
+                label = '0'
+                print("no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[4]
+            if line[5] == 'hate':
+                label = '1'
+                print("test found severe")
+            else:
+                label = '0'
+                print("test no severe")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class TracCovert_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "TRAC_aggressive_en/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "TRAC_aggressive_en/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == "CAG":
+                print("covert")
+                label = '1'
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == "CAG":
+                label = '1'
+                print("test found CAG")
+            else:
+                label = '0'
+                print("test no CAG")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+class TracOvert_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "TRAC_aggressive_en/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "TRAC_aggressive_en/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == "OAG":
+                print("overt")
+                label = '1'
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == "OAG":
+                label = '1'
+                print("test found OAG")
+            else:
+                label = '0'
+                print("test no OAG")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class TracAggr_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "TRAC_aggressive_en/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "TRAC_aggressive_en/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        print("creating training examples")
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] != "NAG":
+                print("agg")
+                label = '1'
+            else:
+                print("n agg")
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] != "NAG":
+                label = '1'
+                print("test found OAG")
+            else:
+                label = '0'
+                print("test no OAG")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ZeerakHate_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "zeerak/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "zeerak/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[2] != "neither":
+                print("hate")
+                label = '1'
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[2] != "neither":
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ZeerakRacism_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "zeerak/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "zeerak/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "racism":
+                print("hate")
+                label = '1'
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "racism":
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class ZeerakSexism_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "zeerak/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "zeerak/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "sexism":
+                print("hate")
+                label = '1'
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "sexism":
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
 
 
 def convert_single_example(ex_index, example, label_list, max_seq_length,
