@@ -338,7 +338,7 @@ class MrpcProcessor(DataProcessor):
     return examples
 
 
-class ColaProcessor(DataProcessor):
+class ColProcessor(DataProcessor):
   """Processor for the CoLA data set (GLUE version)."""
 
   def get_train_examples(self, data_dir):
@@ -378,7 +378,7 @@ class ColaProcessor(DataProcessor):
           InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
     return examples
 
-class Offen_1_Processor(DataProcessor):
+class Offen1Processor(DataProcessor):
     def get_train_examples(self, data_dir):
       """See base class."""
       return self._create_trn_examples(
@@ -1844,7 +1844,7 @@ def main(_):
       "mnli": MnliProcessor,
       "mrpc": MrpcProcessor,
       "xnli": XnliProcessor,
-      "one": Offen_1_Processor,
+      "one": Offen1Processor,
       "hateval_hate": HatevalHate_Processor,
       "hateval_aggression": HatevalAggression_Processor,
       "ami": ami_Processor,
