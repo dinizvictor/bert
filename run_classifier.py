@@ -569,7 +569,7 @@ class ami_Processor(DataProcessor):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
             text_a = line[2]
-            if line[3] == '1':
+            if line[3] == 1:
                 label = '1'
                 print("misoginy")
             else:
@@ -585,7 +585,7 @@ class ami_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             guid = line[0]
             text_a = line[2]
-            if line[3] == '1':
+            if line[3] == 1:
                 label = '1'
                 print("test found misoginy")
             else:
