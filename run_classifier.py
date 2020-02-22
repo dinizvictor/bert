@@ -462,7 +462,7 @@ class HatevalHate_Processor(DataProcessor):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
             text_a = line[1]
-            if line[2] == '1':
+            if line[2] == 1:
                 label = '1'
                 print("train found hate")
             else:
@@ -478,7 +478,7 @@ class HatevalHate_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             guid = line[0]
             text_a = line[1]
-            if line[2] == '1':
+            if line[2] == 1:
                 label = '1'
                 print("test found hate")
             else:
@@ -516,7 +516,7 @@ class HatevalAggression_Processor(DataProcessor):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
             text_a = line[1]
-            if line[4] == '1':
+            if line[4] == 1:
                 label = '1'
                 print("test found hate")
             else:
@@ -532,7 +532,7 @@ class HatevalAggression_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             guid = line[0]
             text_a = line[1]
-            if line[4] == '1':
+            if line[4] == 1:
                 label = '1'
                 print("test found hate")
             else:
