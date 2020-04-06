@@ -198,15 +198,15 @@ class DataProcessor(object):
   def _read_tsv(cls, input_file, quotechar=None):
     """Reads a tab separated value file."""
     #with tf.gfile.Open(input_file, "r") as f:
-      reader = csv.reader(f, delimiter="\t", quotechar=quotechar)
-      lines = []
-      df = pd.read_csv(input_file, sep='\t', encoding='utf-8')
-      for index, row in df.iterrows():
-          lines.append(row.tolist())
+    #reader = csv.reader(f, delimiter="\t", quotechar=quotechar)
+    lines = []
+    df = pd.read_csv(input_file, sep='\t', encoding='utf-8')
+    for index, row in df.iterrows():
+        lines.append(row.tolist())
 
-      # for line in reader:
-      #  lines.append(line)
-      return lines
+    # for line in reader:
+    #  lines.append(line)
+    return lines
 
 
 class XnliProcessor(DataProcessor):
