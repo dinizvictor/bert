@@ -1921,7 +1921,7 @@ def main(_):
       "trac_aggr": TracAggr_Processor,
       "zeerak_hate": ZeerakHate_Processor,
       "zeerak_racism": ZeerakRacism_Processor,
-      "zeerak_sexism": ZeerakSexism_Processor,
+      "zeerak_sexism": ZeerakSexism_Processor
   }
 
   tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case,
