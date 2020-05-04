@@ -378,6 +378,194 @@ class ColProcessor(DataProcessor):
           InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
     return examples
 
+class FountaHateful_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/test.tsv")), "dev")
+
+    def get_test_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "hateful":
+                label = '1'
+                print("founta")
+            else:
+                label = '0'
+                print("no founta")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "hateful":
+                label = '1'
+                print("founta")
+            else:
+                label = '0'
+                print("no founta")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class FountaAbusive_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/test.tsv")), "dev")
+
+    def get_test_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "abusive":
+                label = '1'
+                print("founta")
+            else:
+                label = '0'
+                print("no founta")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "abusive":
+                label = '1'
+                print("founta")
+            else:
+                label = '0'
+                print("no founta")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class FountaToxicity_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/test.tsv")), "dev")
+
+    def get_test_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "founta/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "abusive":
+                label = '1'
+                print("founta")
+            elif line[2] == "hateful":
+                label = '1'
+                print("founta")
+            else:
+                label = '0'
+                print("no founta")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[1]
+            if line[2] == "abusive":
+                label = '1'
+                print("founta")
+            elif line[2] == "hateful":
+                label = '1'
+                print("founta")
+            else:
+                label = '0'
+                print("no founta")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
 class Offen1Processor(DataProcessor):
     def get_train_examples(self, data_dir):
       """See base class."""
@@ -1921,7 +2109,10 @@ def main(_):
       "trac_aggr": TracAggr_Processor,
       "zeerak_hate": ZeerakHate_Processor,
       "zeerak_racism": ZeerakRacism_Processor,
-      "zeerak_sexism": ZeerakSexism_Processor
+      "zeerak_sexism": ZeerakSexism_Processor,
+      "founta_hateful": classifier_utils.FountaHateful_Processor,
+      "founta_abusive": classifier_utils.FountaAbusive_Processor,
+      "founta_toxicity": classifier_utils.FountaToxicity_Processor
   }
 
   tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case,
