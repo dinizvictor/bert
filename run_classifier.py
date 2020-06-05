@@ -413,6 +413,7 @@ class NewsTitle_Processor(DataProcessor):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
             text_a = line[18]
+            print(text_a)
             if line[31] == 1:
                 label = '1'
                 print("toxic")
