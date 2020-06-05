@@ -412,9 +412,9 @@ class NewsTitle_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
-            text_a = line[0]
+            text_a = line[1]
             print(text_a)
-            if line[2] == 1:
+            if line[3] == 1:
                 label = '1'
                 print("toxic")
             else:
@@ -430,8 +430,8 @@ class NewsTitle_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
-            text_a = line[0]
-            if line[2] == 1:
+            text_a = line[1]
+            if line[3] == 1:
                 label = '1'
                 print("toxic")
             else:
@@ -474,8 +474,8 @@ class NewsBody_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
-            text_a = line[1]
-            if line[2] == 1:
+            text_a = line[2]
+            if line[3] == 1:
                 label = '1'
                 print("toxic")
             else:
@@ -491,8 +491,8 @@ class NewsBody_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
-            text_a = line[1]
-            if line[2] == 1:
+            text_a = line[2]
+            if line[3] == 1:
                 label = '1'
                 print("toxic")
             else:
@@ -535,8 +535,8 @@ class NewsBoth_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
-            text_a = line[4]
-            if line[2] == 1:
+            text_a = line[5]
+            if line[3] == 1:
                 label = '1'
                 print("toxic")
             else:
@@ -552,8 +552,8 @@ class NewsBoth_Processor(DataProcessor):
         for (i, line) in enumerate(lines):
             #            guid = "%s-%s" % (set_type, i)
             guid = line[0]
-            text_a = line[4]
-            if line[2] == 1:
+            text_a = line[5]
+            if line[3] == 1:
                 label = '1'
                 print("toxic")
             else:
