@@ -970,6 +970,170 @@ class ami_Processor(DataProcessor):
         return examples
 
 
+
+class amiEs_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "multilingual_es_ami/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "multilingual_es_ami/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("misoginy")
+            else:
+                label = '0'
+                print("no misoginy")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("test found misoginy")
+            else:
+                label = '0'
+                print("test no misoginy")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class amiIT_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "multilingual_it_ami/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "multilingual_it_ami/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("misoginy")
+            else:
+                label = '0'
+                print("no misoginy")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("test found misoginy")
+            else:
+                label = '0'
+                print("test no misoginy")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+class fortunaPt_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        ""
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "multilingual_pt_fortuna/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "multilingual_pt_fortuna/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[0]
+            text_a = line[1]
+            if line[3] == 1:
+                label = '1'
+                print("sexism")
+            else:
+                label = '0'
+                print("no sexism")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[0]
+            text_a = line[2]
+            if line[3] == 1:
+                label = '1'
+                print("test found sexism")
+            else:
+                label = '0'
+                print("test no sexism")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
+
 class DavidsonToxicity_Processor(DataProcessor):
     def get_train_examples(self, data_dir):
         """See base class."""
@@ -2279,6 +2443,9 @@ def main(_):
       "hateval_hate": HatevalHate_Processor,
       "hateval_aggression": HatevalAggression_Processor,
       "ami": ami_Processor,
+      "ami_es": amiEs_Processor,
+      "ami_it": amiIT_Processor,
+      "fortuna_pt": fortunaPt_Processor,
       "davidson_hate": DavidsonHate_Processor,
       "davidson_offensive": DavidsonOffensive_Processor,
       "davidson_toxicity": DavidsonToxicity_Processor,
