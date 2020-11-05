@@ -1121,7 +1121,7 @@ class fortunaPt_Processor(DataProcessor):
         examples = []
         for (i, line) in enumerate(lines):
             guid = line[0]
-            text_a = line[2]
+            text_a = line[1]
             if line[3] == 1:
                 label = '1'
                 print("test found sexism")
