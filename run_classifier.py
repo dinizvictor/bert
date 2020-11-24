@@ -1078,7 +1078,6 @@ class amiIT_Processor(DataProcessor):
                 InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
         return examples
 
-fortunaHsPt_Processor
 
 class fortunaHsPt_Processor(DataProcessor):
     def get_train_examples(self, data_dir):
