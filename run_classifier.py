@@ -1922,6 +1922,58 @@ class TracAggr_Processor(DataProcessor):
         return examples
 
 
+class feminicidio_Processor_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+
+        return self._create_trn_examples(
+            self._read_tsv(os.path.join(data_dir, "feminicidio/train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        #        return self._create_test_examples(
+        #            self._read_tsv(os.path.join(data_dir, "testset-taska.tsv")), "dev")
+        return self._create_dev_examples(
+            self._read_tsv(os.path.join(data_dir, "feminicidio/test.tsv")), "dev")
+
+    def get_labels(self):
+        """See base class."""
+        return ["0", "1"]
+
+    def _create_trn_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        print("creating training examples")
+        examples = []
+        for (i, line) in enumerate(lines):
+            #            guid = "%s-%s" % (set_type, i)
+            guid = line[5]
+            text_a = line[9]
+            if line[2] == "y":
+                print("hate")
+                label = '1'
+            else:
+                label = '0'
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    def _create_dev_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = line[5]
+            text_a = line[9]
+            if line[2] == "y":
+                label = '1'
+                print("test found hate")
+            else:
+                label = '0'
+                print("test no hate")
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+
 class ZeerakHate_Processor(DataProcessor):
     def get_train_examples(self, data_dir):
         """See base class."""
@@ -2500,6 +2552,7 @@ def main(_):
       "ami_it": amiIT_Processor,
       "fortuna_pt": fortunaPt_Processor,
       "fortuna_hs_pt": fortunaHsPt_Processor,
+      "feminicidio": feminicidio_Processor,
       "davidson_hate": DavidsonHate_Processor,
       "davidson_offensive": DavidsonOffensive_Processor,
       "davidson_toxicity": DavidsonToxicity_Processor,
