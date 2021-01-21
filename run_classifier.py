@@ -1922,7 +1922,7 @@ class TracAggr_Processor(DataProcessor):
         return examples
 
 
-class feminicidio_Processor_Processor(DataProcessor):
+class feminicidio_Processor(DataProcessor):
     def get_train_examples(self, data_dir):
         """See base class."""
 
